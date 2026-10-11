@@ -4,6 +4,19 @@ A simple Data Analyst Agent with a Streamlit dashboard. It analyzes course compl
 and student progress, and answers plain-language questions about the data
 (in English, Ukrainian or any other language).
 
+## Key findings
+
+These are associations in the data, not causes.
+
+- **Duration.** Shorter courses have higher completion: 8.9% in the shortest quarter of
+  courses vs 1.9% in the longest (Spearman −0.47 between content minutes and completion
+  rate across 706 courses).
+- **Level.** Advanced courses have the lowest completion rate, 2.13% (a smaller group:
+  1,927 enrollments).
+- **Zero completion.** 153 of 706 courses (with at least 30 enrollments) have 0% completion.
+  Among them is `Database Management Essentials`, the `total_minutes` outlier M7 from
+  `docs/data_profile.md`.
+
 ## What the agent does
 
 1. **Routing.** Gemini receives the question and a fixed list of analyses
@@ -105,7 +118,17 @@ Copy-Item .env.example .env       # then fill in DATABASE_URL, GEMINI_API_KEY, G
 streamlit run app.py
 ```
 
+- `DATABASE_URL` — the read-only connection string from the course materials.
+- `GEMINI_MODEL` — a Flash Lite model is recommended: on the free tier some models allow
+  only 20 requests per day, and each question uses 2 Gemini calls (routing + answer).
+
 `.env` is loaded with python-dotenv and is excluded from git via `.gitignore`.
+
+## Limitations
+
+- The agent only answers questions covered by the four analyses (`overview`,
+  `course_ranking`, `by_level`, `by_duration`); other questions fall back to the overview.
+- Users, payments and reviews are not used.
 
 ## Project structure
 

@@ -237,8 +237,9 @@ def _client() -> genai.Client:
     key = os.getenv("GEMINI_API_KEY")
     if not key:
         raise RuntimeError("GEMINI_API_KEY is not set in .env")
-    # Retry with backoff on transient errors (e.g. 503 "model overloaded").
-    retry = types.HttpRetryOptions(attempts=4, initial_delay=2.0)
+    # Retry with backoff only on 503 "model overloaded". Not on 429: retrying a
+    # rate limit just burns more of the daily free-tier quota.
+    retry = types.HttpRetryOptions(attempts=4, initial_delay=2.0, http_status_codes=[503])
     return genai.Client(api_key=key, http_options=types.HttpOptions(retry_options=retry))
 
 
