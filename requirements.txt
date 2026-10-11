@@ -1,0 +1,7 @@
+streamlit>=1.50
+altair>=5.5
+pandas>=2.2
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+google-genai>=1.30
+python-dotenv>=1.0
